@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+
+    # port mapping
+    ports:
+      - 5400:5432 # host:container
+
+    # volume mapping
+    volumes:
+     - postgres_data:/var/lib/postgresql/data # volume_name:mount_directory
+
+    # environment variables
+    environment:
+      POSTGRES_PASSWORD: your_strong_password
+      POSTGRES_USER: blog
+      POSTGRES_DB: blog
+
+volumes:
+  postgres_data: # 볼륨 이름 지정
+    # driver, driver_opts, external, name, labels 등 추가 옵션 지정 가능
+    labels:
+      com.joonhoe.blog: "postgres database volume for blog.joonhoe.com"
+    driver: local
+    external: false
+
+
