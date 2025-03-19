@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import LexcialEditorWrapper from '@/components/LexicalEditor';
+import LexcialEditorWrapper from '@/components/LexicalEditorWrapper';
 import { EditorState } from 'lexical';
 
 export default function Edit() {
