@@ -1,0 +1,12 @@
+{
+    "organizeImports": {
+        "enabled": true
+    },
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "linter": {
+        "enabled": false
+    }
+}
