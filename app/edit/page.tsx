@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import LexicalEditor from '../components/LexicalEditor';
+import LexcialEditorWrapper from '@/components/LexicalEditor';
 import { EditorState } from 'lexical';
 
 export default function Edit() {
@@ -12,7 +12,7 @@ export default function Edit() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!content) {
       alert('Please enter some content');
       return;
@@ -41,7 +41,7 @@ export default function Edit() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Create New Post</h1>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
@@ -61,7 +61,7 @@ export default function Edit() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Content
           </label>
-          <LexicalEditor
+          <LexcialEditorWrapper
             onChange={setContent}
           />
         </div>

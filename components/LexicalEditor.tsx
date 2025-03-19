@@ -13,6 +13,7 @@ import { CodeNode, CodeHighlightNode } from '@lexical/code';
 import { LinkNode } from '@lexical/link';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { EditorState } from 'lexical';
+import { LexicalEditor } from 'lexical';
 
 const theme = {
   // Add your theme configuration here
@@ -41,11 +42,11 @@ const initialConfig = {
 };
 
 interface LexicalEditorProps {
-  onChange?: (editorState: EditorState) => void;
+  onChange?: (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => void | undefined;
   initialContent?: string;
 }
 
-export default function LexicalEditor({ onChange, initialContent }: LexicalEditorProps) {
+export default function LexcialEditorWrapper({ onChange, initialContent }: LexicalEditorProps) {
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="editor-container border rounded-lg p-4">
