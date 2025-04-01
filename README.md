@@ -29,10 +29,10 @@ NEXTAUTH_SECRET="changeme"
 NEXTAUTH_URL=http://localhost:3000
 
 # DB Connection
-DB_USER=user_name
-DB_HOST=host_address
-DB_NAME=database_name
-DB_PASSWORD=database_password
-DB_PORT=5432
+DB_USER=blog
+DB_PASSWORD=your_strong_password
+DB_HOST=localhost
+DB_PORT=5400
+DB_DATABASE=blog
 ```
 

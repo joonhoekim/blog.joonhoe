@@ -33,7 +33,7 @@ export default async function Home() {
       </div>
 
       <div className="space-y-8">
-        {posts.map(async (post) => {
+        {posts.length > 0 && posts.map(async (post) => {
           const comments = await getComments(post.id);
           return (
             <article key={post.id} className="border rounded-lg p-6">
