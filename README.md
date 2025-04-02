@@ -5,7 +5,7 @@
 1. Base: nextjs 15 & react 19
 2. ORM: drizzle
 3. DB: postgres
-4. Editor: Lexical
+4. Editor: Lexical (Execute `pnpm run update-lexical`)
 5. Data Mutation: SWR
 6. State Management: Jotai & Zustand
 
@@ -35,4 +35,3 @@ DB_NAME=database_name
 DB_PASSWORD=database_password
 DB_PORT=5432
 ```
-
