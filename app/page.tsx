@@ -1,6 +1,5 @@
-import PlaygroundApp from '@/lexical-use-client/packages/lexical-playground/src/App';
-import '@/lexical-use-client/packages/lexical-playground/src/index.css';
+import Editor from "@/lexical-editor/Editor";
 
 export default function Playground() {
-  return <PlaygroundApp />;
+  return <Editor />;
 }
