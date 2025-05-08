@@ -1,41 +1,39 @@
-'use client';
+"use client";
 
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { EditorTheme } from './config/EditorTheme';
-import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { AutoLinkPlugin } from '@lexical/react/LexicalAutoLinkPlugin';
-import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { ClickableLinkPlugin } from '@lexical/react/LexicalClickableLinkPlugin';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { EditorConfig } from "./config/EditorConfig";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import MarkdownPlugin from "./plugins/MarkdownShortcutPlugin";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 
 export default function Editor() {
-  // 툴바를 에디터에 연결하기 위해 필요
-  // const isEditable = useLexicalEditable();
-  // const [editor] = useLexicalComposerContext();
+	const Placeholder = () => {
+		return (
+			<div className="absolute top-0 left-0 w-full h-full text-gray-400">
+				Start typing...
+			</div>
+		);
+	};
 
-  const initialConfig = {
-    namespace: 'defaultEditor',
-    onError: (error: Error) => {
-      throw error;
-    },
-    theme: EditorTheme,
-  };
-
-  return (
-    <>
-      <LexicalComposer initialConfig={initialConfig}>
-        <AutoFocusPlugin />
-
-        <MarkdownShortcutPlugin />
-
-        <ListPlugin />
-
-        <ClickableLinkPlugin />
-
-        <HistoryPlugin />
-      </LexicalComposer>
-    </>
-  );
+	return (
+		<>
+			<LexicalComposer initialConfig={EditorConfig}>
+				<RichTextPlugin
+					contentEditable={<ContentEditable />}
+					placeholder={<Placeholder />}
+					ErrorBoundary={LexicalErrorBoundary}
+				/>
+				<HistoryPlugin />
+				{/* <MarkdownPlugin /> */}
+				{/* <MarkdownShortcutPlugin /> */}
+				<AutoFocusPlugin />
+			</LexicalComposer>
+		</>
+	);
 }

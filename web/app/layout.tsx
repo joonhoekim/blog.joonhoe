@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body>
+			<body className="font-inter min-h-screen min-w-screen">
 				<FontProvider>{children}</FontProvider>
 			</body>
 		</html>
