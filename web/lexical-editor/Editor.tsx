@@ -15,9 +15,8 @@ import { AutoLinkPlugin } from "@lexical/react/LexicalAutoLinkPlugin";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useState } from "react";
-import type { LinkMatcher } from "@lexical/link";
 
-const URL_MATCHER: LinkMatcher = (text) => {
+const URL_MATCHER = (text: string) => {
 	const urlPattern = /(https?:\/\/[^\s]+)/g;
 	const match = urlPattern.exec(text);
 	return match
