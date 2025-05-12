@@ -102,45 +102,45 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 	};
 
 	return (
-		<div className="w-full h-full bg-[#1e1e1e] border-t border-[#333333]">
+		<div className="w-full h-full bg-background border-t border-border">
 			<Tabs
 				defaultValue={activeTab}
 				value={activeTab}
 				className="h-full"
 				onValueChange={handleTabChange}
 			>
-				<TabsList className="flex justify-start h-9 bg-[#252526] border-b border-[#1e1e1e] pl-1">
+				<TabsList className="flex justify-start h-9 bg-muted/80 border-b border-border pl-1">
 					<TabsTrigger
 						value="comments"
-						className="h-9 px-3 data-[state=active]:bg-[#1e1e1e] data-[state=inactive]:bg-[#2d2d2d] data-[state=active]:border-t-2 data-[state=active]:border-t-[#007acc]"
+						className="h-9 px-3 data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:border-t-2 data-[state=active]:border-t-primary"
 					>
 						코멘트
 					</TabsTrigger>
 
 					<TabsTrigger
 						value="terminal"
-						className="h-9 px-3 data-[state=active]:bg-[#1e1e1e] data-[state=inactive]:bg-[#2d2d2d] data-[state=active]:border-t-2 data-[state=active]:border-t-[#007acc]"
+						className="h-9 px-3 data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:border-t-2 data-[state=active]:border-t-primary"
 					>
 						터미널
 					</TabsTrigger>
 
 					<TabsTrigger
 						value="problems"
-						className="h-9 px-3 data-[state=active]:bg-[#1e1e1e] data-[state=inactive]:bg-[#2d2d2d] data-[state=active]:border-t-2 data-[state=active]:border-t-[#007acc]"
+						className="h-9 px-3 data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:border-t-2 data-[state=active]:border-t-primary"
 					>
 						문제
 					</TabsTrigger>
 
 					<TabsTrigger
 						value="output"
-						className="h-9 px-3 data-[state=active]:bg-[#1e1e1e] data-[state=inactive]:bg-[#2d2d2d] data-[state=active]:border-t-2 data-[state=active]:border-t-[#007acc]"
+						className="h-9 px-3 data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:border-t-2 data-[state=active]:border-t-primary"
 					>
 						출력
 					</TabsTrigger>
 
 					<TabsTrigger
 						value="debug"
-						className="h-9 px-3 data-[state=active]:bg-[#1e1e1e] data-[state=inactive]:bg-[#2d2d2d] data-[state=active]:border-t-2 data-[state=active]:border-t-[#007acc]"
+						className="h-9 px-3 data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:border-t-2 data-[state=active]:border-t-primary"
 					>
 						디버그 콘솔
 					</TabsTrigger>
@@ -155,7 +155,7 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 							{comments.map((comment) => (
 								<div
 									key={comment.id}
-									className="bg-[#252526] p-3 rounded border border-[#333333]"
+									className="bg-muted/80 p-3 rounded border border-border"
 								>
 									<div className="flex items-start space-x-2">
 										<Avatar className="h-8 w-8">
@@ -165,27 +165,27 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 													alt={comment.author}
 												/>
 											)}
-											<AvatarFallback className="bg-[#007acc] text-white">
+											<AvatarFallback className="bg-primary text-primary-foreground">
 												{comment.initials}
 											</AvatarFallback>
 										</Avatar>
 										<div className="flex-1">
 											<div className="flex justify-between">
-												<div className="font-medium text-white">
+												<div className="font-medium text-foreground">
 													{comment.author}
 												</div>
-												<div className="text-xs text-[#888888]">
+												<div className="text-xs text-muted-foreground">
 													{comment.timestamp}
 												</div>
 											</div>
-											<p className="mt-1 text-sm text-[#cccccc]">
+											<p className="mt-1 text-sm text-foreground/80">
 												{comment.content}
 											</p>
 											<div className="flex mt-2 space-x-2">
 												<button
 													type="button"
 													onClick={() => handleLike(comment.id)}
-													className="flex items-center text-xs text-[#888888] hover:text-white"
+													className="flex items-center text-xs text-muted-foreground hover:text-foreground"
 												>
 													<ThumbsUp className="h-3 w-3 mr-1" />
 													{comment.likes}
@@ -193,7 +193,7 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 												<button
 													type="button"
 													onClick={() => handleDislike(comment.id)}
-													className="flex items-center text-xs text-[#888888] hover:text-white"
+													className="flex items-center text-xs text-muted-foreground hover:text-foreground"
 												>
 													<ThumbsDown className="h-3 w-3 mr-1" />
 													{comment.dislikes}
@@ -206,18 +206,18 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 						</div>
 					</div>
 
-					<div className="p-3 border-t border-[#333333] bg-[#252526]">
+					<div className="p-3 border-t border-border bg-muted/80">
 						<div className="flex items-end space-x-2">
 							<Textarea
 								value={newComment}
 								onChange={(e) => setNewComment(e.target.value)}
 								placeholder="코멘트를 입력하세요..."
-								className="min-h-[40px] bg-[#1e1e1e] border-[#3c3c3c] text-[#cccccc] resize-none"
+								className="min-h-[40px] bg-input border-input text-foreground resize-none"
 							/>
 							<Button
 								onClick={handleAddComment}
 								size="sm"
-								className="bg-[#007acc] hover:bg-[#0068b3] h-9 px-3"
+								className="bg-primary hover:bg-primary/80 h-9 px-3"
 							>
 								<Send className="h-4 w-4" />
 							</Button>
@@ -226,48 +226,54 @@ const BottomSidebar = ({ activeTab }: BottomSidebarProps) => {
 				</TabsContent>
 
 				<TabsContent value="terminal" className="h-[calc(100%-36px)] p-0 m-0">
-					<div className="bg-[#1e1e1e] text-[#cccccc] p-2 font-mono text-sm h-full overflow-auto">
+					<div className="bg-background text-foreground p-2 font-mono text-sm h-full overflow-auto">
 						<div className="flex">
-							<span className="text-[#569cd6]">user@blog</span>
-							<span className="text-[#cccccc]">:</span>
-							<span className="text-[#ce9178]">~/git/blog.joonhoe-1</span>
-							<span className="text-[#cccccc]">$</span>
-							<span className="text-[#cccccc] ml-1">npm run dev</span>
+							<span className="text-blue-400 dark:text-blue-300">
+								user@blog
+							</span>
+							<span className="text-foreground">:</span>
+							<span className="text-orange-400 dark:text-orange-300">
+								~/git/blog.joonhoe-1
+							</span>
+							<span className="text-foreground">$</span>
+							<span className="text-foreground ml-1">npm run dev</span>
 						</div>
-						<div className="text-[#6a9955]">{">"} blog.joonhoe@0.1.0 dev</div>
-						<div className="text-[#cccccc]">{">"} next dev</div>
-						<div className="text-[#569cd6]">
+						<div className="text-green-500 dark:text-green-400">
+							{">"} blog.joonhoe@0.1.0 dev
+						</div>
+						<div className="text-foreground">{">"} next dev</div>
+						<div className="text-blue-400 dark:text-blue-300">
 							- ready started server on [::]:3000, url: http://localhost:3000
 						</div>
-						<div className="text-[#569cd6]">
+						<div className="text-blue-400 dark:text-blue-300">
 							- event compiled client and server successfully in 324 ms (17
 							modules)
 						</div>
-						<div className="text-[#569cd6]">- wait compiling...</div>
-						<div className="text-[#569cd6]">
+						<div className="text-blue-400 dark:text-blue-300">
+							- wait compiling...
+						</div>
+						<div className="text-blue-400 dark:text-blue-300">
 							- event compiled client and server successfully in 153 ms (19
 							modules)
 						</div>
 					</div>
 				</TabsContent>
 
-				<TabsContent value="problems" className="h-[calc(100%-36px)] p-0 m-0">
-					<div className="p-4 text-sm text-[#cccccc]">
-						<div className="text-center">문제가 발견되지 않았습니다</div>
+				<TabsContent value="problems" className="h-[calc(100%-36px)] p-4 m-0">
+					<div className="text-muted-foreground text-sm">
+						No problems have been detected in the workspace.
 					</div>
 				</TabsContent>
 
-				<TabsContent value="output" className="h-[calc(100%-36px)] p-0 m-0">
-					<div className="p-4 text-sm text-[#cccccc]">
-						<div>{">"} Blog server start at http://localhost:3000</div>
+				<TabsContent value="output" className="h-[calc(100%-36px)] p-4 m-0">
+					<div className="text-muted-foreground text-sm">
+						No output to display.
 					</div>
 				</TabsContent>
 
-				<TabsContent value="debug" className="h-[calc(100%-36px)] p-0 m-0">
-					<div className="p-4 text-sm text-[#cccccc]">
-						<div className="text-[#569cd6]">
-							[info] 디버깅 세션이 시작되었습니다.
-						</div>
+				<TabsContent value="debug" className="h-[calc(100%-36px)] p-4 m-0">
+					<div className="text-muted-foreground text-sm">
+						No debug session active.
 					</div>
 				</TabsContent>
 			</Tabs>

@@ -25,7 +25,7 @@ const VSCodeLayoutContent = ({ children }: VSCodeLayoutProps) => {
 	} = useVSCodeLayout();
 
 	return (
-		<div className="flex flex-col h-screen w-screen overflow-hidden bg-[#1e1e1e] text-[#cccccc]">
+		<div className="flex flex-col h-screen w-screen overflow-hidden bg-background text-foreground">
 			<Header />
 
 			<div className="flex-1 overflow-hidden">
@@ -36,11 +36,11 @@ const VSCodeLayoutContent = ({ children }: VSCodeLayoutProps) => {
 								defaultSize={20}
 								minSize={15}
 								maxSize={30}
-								className="bg-[#252526]"
+								className="bg-muted/80"
 							>
 								<LeftSidebar />
 							</ResizablePanel>
-							<ResizableHandle withHandle className="bg-[#1e1e1e] w-1" />
+							<ResizableHandle withHandle className="bg-background w-1" />
 						</>
 					)}
 
@@ -50,19 +50,19 @@ const VSCodeLayoutContent = ({ children }: VSCodeLayoutProps) => {
 						<ResizablePanelGroup direction="vertical" className="h-full">
 							<ResizablePanel
 								defaultSize={showBottomSidebar ? 70 : 100}
-								className="bg-[#1e1e1e]"
+								className="bg-background"
 							>
 								<main className="h-full overflow-auto">{children}</main>
 							</ResizablePanel>
 
 							{showBottomSidebar && (
 								<>
-									<ResizableHandle withHandle className="bg-[#1e1e1e] h-1" />
+									<ResizableHandle withHandle className="bg-background h-1" />
 									<ResizablePanel
 										defaultSize={30}
 										minSize={10}
 										maxSize={60}
-										className="bg-[#1e1e1e]"
+										className="bg-background"
 									>
 										<BottomSidebar activeTab={activeBottomTab} />
 									</ResizablePanel>
@@ -73,12 +73,12 @@ const VSCodeLayoutContent = ({ children }: VSCodeLayoutProps) => {
 
 					{showRightSidebar && (
 						<>
-							<ResizableHandle withHandle className="bg-[#1e1e1e] w-1" />
+							<ResizableHandle withHandle className="bg-background w-1" />
 							<ResizablePanel
 								defaultSize={20}
 								minSize={15}
 								maxSize={40}
-								className="bg-[#252526]"
+								className="bg-muted/80"
 							>
 								<RightSidebar />
 							</ResizablePanel>
