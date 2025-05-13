@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   DndContext,
   closestCenter,
@@ -19,6 +19,8 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useVSCodeLayout } from "./VSCodeLayoutContext";
+import { PencilIcon, Check, X } from "lucide-react";
 
 // This represents a file or folder in our tree
 type TreeItem = {
@@ -196,11 +198,15 @@ const TreeItemContent = ({ item }: { item: TreeItem }) => {
 const SortableTreeItem = ({
   item,
   onToggleFolder,
+  onRenameItem,
   isDragging = false,
+  isEditMode = false,
 }: {
   item: TreeItem;
   onToggleFolder: (id: string) => void;
+  onRenameItem?: (id: string, newName: string) => void;
   isDragging?: boolean;
+  isEditMode?: boolean;
 }) => {
   const {
     attributes,
@@ -209,7 +215,18 @@ const SortableTreeItem = ({
     transform,
     transition,
     isDragging: isSortableDragging,
-  } = useSortable({ id: item.id });
+  } = useSortable({ id: item.id, disabled: !isEditMode });
+
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newName, setNewName] = useState(item.name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isRenaming && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isRenaming]);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -225,6 +242,33 @@ const SortableTreeItem = ({
     }
   };
 
+  const startRenaming = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isEditMode) {
+      setIsRenaming(true);
+    }
+  };
+
+  const handleRename = () => {
+    if (newName.trim() && onRenameItem) {
+      onRenameItem(item.id, newName.trim());
+    }
+    setIsRenaming(false);
+  };
+
+  const cancelRename = () => {
+    setNewName(item.name);
+    setIsRenaming(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleRename();
+    } else if (e.key === "Escape") {
+      cancelRename();
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -232,32 +276,74 @@ const SortableTreeItem = ({
       className={`flex items-center space-x-2 py-1 rounded group ${
         isSortableDragging ? "bg-accent/30" : "hover:bg-accent/50"
       }`}>
-      <div
-        className="flex items-center space-x-2 cursor-pointer flex-grow"
-        onClick={handleFolderClick}>
-        <TreeItemContent item={item} />
-      </div>
+      {isRenaming ? (
+        <div className="flex items-center space-x-2 pl-6 flex-grow">
+          <input
+            ref={inputRef}
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleRename}
+            className="bg-background text-foreground border border-input rounded px-2 py-0.5 text-sm w-full"
+          />
+          <button
+            onClick={handleRename}
+            className="text-primary hover:text-primary/80"
+            aria-label="Save rename">
+            <Check size={16} />
+          </button>
+          <button
+            onClick={cancelRename}
+            className="text-destructive hover:text-destructive/80"
+            aria-label="Cancel rename">
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <>
+          <div
+            className="flex items-center space-x-2 cursor-pointer flex-grow"
+            onClick={handleFolderClick}>
+            <TreeItemContent item={item} />
+          </div>
 
-      <div
-        className="ml-auto opacity-0 group-hover:opacity-100 cursor-move"
-        {...attributes}
-        {...listeners}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round">
-          <circle cx="8" cy="8" r="1" />
-          <circle cx="8" cy="16" r="1" />
-          <circle cx="16" cy="8" r="1" />
-          <circle cx="16" cy="16" r="1" />
-        </svg>
-      </div>
+          {isEditMode && (
+            <button
+              className="ml-auto opacity-0 group-hover:opacity-100 cursor-pointer mr-1"
+              onClick={startRenaming}
+              aria-label="Rename item">
+              <PencilIcon size={14} />
+            </button>
+          )}
+
+          {isEditMode && (
+            <div
+              className="ml-auto opacity-0 group-hover:opacity-100 cursor-move"
+              {...attributes}
+              {...listeners}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-grip-vertical">
+                <circle cx="9" cy="5" r="1" />
+                <circle cx="9" cy="12" r="1" />
+                <circle cx="9" cy="19" r="1" />
+                <circle cx="15" cy="5" r="1" />
+                <circle cx="15" cy="12" r="1" />
+                <circle cx="15" cy="19" r="1" />
+              </svg>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };
@@ -266,8 +352,9 @@ const SortableTreeItem = ({
 const TreeEditor = () => {
   const [items, setItems] = useState<TreeItem[]>(initialItems);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const flatItems = flattenTree(items);
-  const activeItem = activeId ? findItemById(items, activeId) : null;
+  const [activeItem, setActiveItem] = useState<TreeItem | null>(null);
+
+  const { isEditMode } = useVSCodeLayout();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -276,53 +363,71 @@ const TreeEditor = () => {
     }),
   );
 
+  const flattenedItems = flattenTree(items);
+
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
+    const { active } = event;
+    setActiveId(active.id as string);
+    setActiveItem(findItemById(items, active.id as string));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (!isEditMode) return;
+
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      // In a real implementation, we'd update the nested tree structure
-      // This is simplified for demonstration
-      console.log(`Moved ${active.id} to position of ${over.id}`);
-
-      // For a full implementation, you would need to:
-      // 1. Find the items in the tree
-      // 2. Update their positions
-      // 3. Handle level changes (if dragging to different nesting levels)
+      console.log(`Moved ${active.id} over ${over.id}`);
     }
 
     setActiveId(null);
+    setActiveItem(null);
   };
 
   const handleToggleFolder = (id: string) => {
-    setItems((prevItems) => toggleFolder(prevItems, id));
+    setItems(toggleFolder(items, id));
+  };
+
+  const handleRenameItem = (id: string, newName: string) => {
+    if (!isEditMode) return;
+
+    console.log(`Renamed ${id} to ${newName}`);
   };
 
   return (
-    <div className="px-4 py-2">
+    <div className="w-full">
+      {isEditMode && (
+        <div className="px-4 py-2 text-xs text-primary border-t border-border mb-2">
+          <p>Edit Mode Active</p>
+          <p>• Drag items to reorder</p>
+          <p>• Click the pencil icon to rename</p>
+        </div>
+      )}
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}>
         <SortableContext
-          items={flatItems.map((item) => item.id)}
+          items={flattenedItems.map((item) => item.id)}
           strategy={verticalListSortingStrategy}>
-          {flatItems.map((item) => (
-            <SortableTreeItem
-              key={item.id}
-              item={item}
-              onToggleFolder={handleToggleFolder}
-            />
-          ))}
+          <div className="space-y-1 p-2">
+            {flattenedItems.map((item) => (
+              <SortableTreeItem
+                key={item.id}
+                item={item}
+                onToggleFolder={handleToggleFolder}
+                onRenameItem={handleRenameItem}
+                isEditMode={isEditMode}
+              />
+            ))}
+          </div>
         </SortableContext>
 
         <DragOverlay>
           {activeItem ? (
-            <div className="bg-background border border-primary/50 rounded p-1 shadow-md">
+            <div className="bg-accent/30 rounded py-1 px-2">
               <TreeItemContent item={activeItem} />
             </div>
           ) : null}
